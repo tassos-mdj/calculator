@@ -24,6 +24,7 @@ function operate(a, b, operator) {
             screen.textContent = sum;
             break;
     }
+    return sum;
 }
 
 const screen = document.querySelector(".screen");
