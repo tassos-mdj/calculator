@@ -1,0 +1,28 @@
+html {
+    box-sizing: border-box;
+}
+
+.calculator {
+    width: 400px;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.kepad {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.row , .lastRow {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+button {
+    flex: 1;
+    aspect-ratio: 1/1;
+}
+
+.row #n0button {
+    flex: 2;
+}
