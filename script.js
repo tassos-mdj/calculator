@@ -78,4 +78,7 @@ keypad.addEventListener('click', (event) => {
         
     }
     
+    if (event.target.className === "equalsButton") {
+        
+    }
   })
