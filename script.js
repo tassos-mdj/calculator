@@ -5,34 +5,32 @@ function operate(a, b, operator) {
     switch (operator){
         case "+": 
             sum = num1 + num2;
-            console.log(num1,num2,typeof num1, sum)
-            screen.textContent = sum;
             break;
         
         case "-": 
             sum = num1 - num2;
-            screen.textContent = sum;
             break;
         
         case "*": 
             sum = num1 * num2;
-            screen.textContent = sum;
             break;
 
         case "/": 
-            sum = num1 / num2;
-            screen.textContent = sum;
+            if (num2 === 0) {screenUpdate('Error');} else {
+            sum = num1 / num2;}
             break;
     }
-    return sum;
+    let rounded = Math.round(sum * 100) / 100;
+    screenUpdate(rounded);
+    return rounded;
 }
 
 const screen = document.querySelector(".screen");
 const keypad = document.querySelector(".keypad");
 screen.textContent = "0"
-let firstNumber = '';
-let secondNumber = '';
-let operatorChosen = '';
+firstNumber = '';
+secondNumber = '';
+operatorChosen = '';
 
 
 keypad.addEventListener('click', (event) => {
@@ -46,27 +44,33 @@ keypad.addEventListener('click', (event) => {
             if (event.target.value === "."){
                 if (!firstNumber.includes(".")){ 
                 firstNumber = firstNumber + event.target.value;
-                screen.textContent = firstNumber;}
+                screenUpdate(firstNumber);}
             } else { 
                 firstNumber = firstNumber + event.target.value;
-                screen.textContent = firstNumber;
+                screenUpdate(firstNumber);
             }
         } else {
             if (event.target.value === "."){
                 if (!secondNumber.includes(".")){ 
                 secondNumber = secondNumber + event.target.value;
-                screen.textContent = secondNumber;}
+                screenUpdate(secondNumber);}
             } else { 
                 secondNumber = secondNumber + event.target.value;
-                screen.textContent = secondNumber;
+                screenUpdate(secondNumber);
             }
         }
     }
 
     if (event.target.className === "operatorBtns") {
         if (firstNumber === '') {
-            firstNumber = 0;
-            operatorChosen = event.target.value;
+            if (screen.textContent !== '0') {
+                firstNumber = screen.textContent;
+                operatorChosen = event.target.value;
+            } else {
+                firstNumber = '0';
+                operatorChosen = event.target.value;
+            }
+
         }
         if (secondNumber.length > 0 && operatorChosen.length > 0){
             firstNumber = operate(firstNumber, secondNumber, operatorChosen);
@@ -79,31 +83,58 @@ keypad.addEventListener('click', (event) => {
     }
     
     if (event.target.id === "equalsButton") {
+        if (secondNumber === '0') {
+            screenUpdate('Error');
+            cleanState();
+        } else {
         sum = operate(firstNumber, secondNumber, operatorChosen);
-        screen.textContent = sum;
-        if (sum === 0) {firstNumber = '';} else  {firstNumber = sum;};
+        screenUpdate(sum);
+        firstNumber = '';
         secondNumber = '';
-        operatorChosen = '';
+        operatorChosen = '';}
     }
 
     if (event.target.id === "clearButton") {
-        screen.textContent = 0;
-        firstNumber = '';
-        secondNumber = '';
-        operatorChosen = '';
+        cleanState();
+        screenUpdate('0');
     }
 
     if (event.target.id === "prefixButton") {
         if (firstNumber.length > 0){
             if (screen.textContent === firstNumber) {
                 firstNumber = '-' + firstNumber;
-                screen.textContent = firstNumber;
+                screenUpdate(firstNumber);
             } else {
                 if (screen.textContent === secondNumber) {
                     secondNumber = '-' + secondNumber;
-                    screen.textContent = secondNumber;
+                    screenUpdate(secondNumber);
                 }
             }
         }
     }
+
+    if (event.target.id === "percentButton") {
+        if (operatorChosen === '*') {
+            secondNumber /= 100;
+            screenUpdate (secondNumber);
+        }
+    }
+
   })
+
+  keypad.addEventListener('keydown', function (event) {})
+
+function screenUpdate(content) {
+    if (content.length > 8){
+        screen.textContent = content.slice(-8);
+    } else{
+    screen.textContent = content;
+}
+    
+}
+
+function cleanState() {
+    firstNumber = '';
+    secondNumber = '';
+    operatorChosen = '';
+}
