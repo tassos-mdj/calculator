@@ -79,6 +79,31 @@ keypad.addEventListener('click', (event) => {
     }
     
     if (event.target.className === "equalsButton") {
-        
+        sum = operate(firstNumber, secondNumber, operatorChosen);
+        screen.textContent = sum;
+        if (sum != 0) {firstNumber = sum;} else  {firstNumber = ''};
+        secondNumber = '';
+        operatorChosen = '';
+    }
+
+    if (event.target.id === "clearButton") {
+        screen.textContent = 0;
+        firstNumber = '';
+        secondNumber = '';
+        operatorChosen = '';
+    }
+
+    if (event.target.id === "prefixButton") {
+        if (firstNumber.length > 0){
+            if (screen.textContent === firstNumber) {
+                firstNumber = '-' + firstNumber;
+                screen.textContent = firstNumber;
+            } else {
+                if (screen.textContent === secondNumber) {
+                    secondNumber = '-' + secondNumber;
+                    screen.textContent = secondNumber;
+                }
+            }
+        }
     }
   })
