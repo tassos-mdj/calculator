@@ -78,10 +78,10 @@ keypad.addEventListener('click', (event) => {
         
     }
     
-    if (event.target.className === "equalsButton") {
+    if (event.target.id === "equalsButton") {
         sum = operate(firstNumber, secondNumber, operatorChosen);
         screen.textContent = sum;
-        if (sum != 0) {firstNumber = sum;} else  {firstNumber = ''};
+        if (sum === 0) {firstNumber = '';} else  {firstNumber = sum;};
         secondNumber = '';
         operatorChosen = '';
     }

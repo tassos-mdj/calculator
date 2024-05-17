@@ -35,6 +35,16 @@ html {
     flex-flow: row;
 }
 
+button {
+    transition: 0.1s ease-in;
+    box-shadow: 0 3px 0 0 darkgray;
+}
+
+button:active {
+    transform: scale(0.95); 
+    box-shadow: inset 3px black;
+}
+
 .row button {
     flex: 1;
     aspect-ratio: 1/1;
