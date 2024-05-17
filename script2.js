@@ -32,66 +32,34 @@ firstNumber = '';
 secondNumber = '';
 operatorChosen = '';
 
-
 keypad.addEventListener('click', (event) => {
     const isButton = event.target.nodeName === 'BUTTON';
     if (!isButton) {
       return;
     }
-    
+
     if (event.target.className === "numberBtns"){
         if (operatorChosen === '') {
             if (event.target.value === "."){
-                if (!firstNumber.includes(".")){ 
-                firstNumber = firstNumber + event.target.value;
-                screenUpdate(firstNumber);}
+                addPoint(1);
             } else { 
-                firstNumber = firstNumber + event.target.value;
-                screenUpdate(firstNumber);
+                updateFirstNumber(event.target.value);
             }
         } else {
             if (event.target.value === "."){
-                if (!secondNumber.includes(".")){ 
-                secondNumber = secondNumber + event.target.value;
-                screenUpdate(secondNumber);}
+                addPoint(2);
             } else { 
-                secondNumber = secondNumber + event.target.value;
-                screenUpdate(secondNumber);
+                updateSecondNumber(event.target.value);
             }
         }
     }
 
     if (event.target.className === "operatorBtns") {
-        if (firstNumber === '') {
-            if (screen.textContent !== '0') {
-                firstNumber = screen.textContent;
-                operatorChosen = event.target.value;
-            } else {
-                firstNumber = '0';
-                operatorChosen = event.target.value;
-            }
-
-        }
-        if (secondNumber.length > 0 && operatorChosen.length > 0){
-            firstNumber = operate(firstNumber, secondNumber, operatorChosen);
-            secondNumber = '';
-            operatorChosen = event.target.value;
-        } else {
-            operatorChosen = event.target.value;
-        }
-        
+        updateOperator(event.target.value);
     }
-    
+
     if (event.target.id === "equalsButton") {
-        if (secondNumber === '0') {
-            screenUpdate('Error');
-            cleanState();
-        } else {
-        sum = operate(firstNumber, secondNumber, operatorChosen);
-        screenUpdate(sum);
-        firstNumber = '';
-        secondNumber = '';
-        operatorChosen = '';}
+        equals();
     }
 
     if (event.target.id === "clearButton") {
@@ -120,17 +88,75 @@ keypad.addEventListener('click', (event) => {
         }
     }
 
-  })
+});
 
-  
+//keypad.addEventListener('keydown', function (event) {})
+
+function addPoint(selector){
+    switch (selector) {
+        case 1:
+            if (!firstNumber.includes(".")){ 
+            console.log(typeof firstNumber);
+            updateFirstNumber(".");
+            }
+            break;
+        case 2:        
+            if (!secondNumber.includes(".")){ 
+            updateSecondNumber(".");
+            }
+            break;             
+}
+}
+
+function updateFirstNumber(newValue) {
+    firstNumber = firstNumber + '' + newValue;
+    screenUpdate(firstNumber);
+}
+
+function updateSecondNumber(newValue) {
+    secondNumber = secondNumber + newValue;
+    screenUpdate(secondNumber);
+}
+
+function updateOperator(newValue) {
+    if (firstNumber === '') {
+        if (screen.textContent !== '0') {
+            firstNumber = screen.textContent;
+            operatorChosen = newValue;
+        } else {
+            firstNumber = '0';
+            operatorChosen = newValue;
+        }
+
+    }
+    if (secondNumber.length > 0 && operatorChosen.length > 0){
+        firstNumber = operate(firstNumber, secondNumber, operatorChosen);
+        secondNumber = '';
+        operatorChosen = newValue;
+    } else {
+        operatorChosen = newValue;
+    }
+}
+
+function equals() {
+    if (secondNumber === '0') {
+        screenUpdate('Error');
+        cleanState();
+    } else {
+    sum = operate(firstNumber, secondNumber, operatorChosen);
+    screenUpdate(sum);
+    firstNumber = '';
+    secondNumber = '';
+    operatorChosen = '';} 
+}
 
 function screenUpdate(content) {
     if (content.length > 8){
         screen.textContent = content.slice(-8);
     } else{
     screen.textContent = content;
-}
-    
+    console.log(content);
+    }
 }
 
 function cleanState() {
