@@ -1,3 +1,6 @@
+// with mouse & keyboard funcionality
+
+//performs the calculation
 function operate(a, b, operator) {
     let sum = 0;
     num1 = Number(a);
@@ -25,19 +28,23 @@ function operate(a, b, operator) {
     return rounded;
 }
 
-const screen = document.querySelector(".screen");
+//initialization and section selectors
+const operatorDisplay = document.querySelector(".operatorDisplay")
+const screen = document.querySelector(".numbersDisplay");
 const keypad = document.querySelector(".keypad");
 screen.textContent = "0"
 firstNumber = '';
 secondNumber = '';
 operatorChosen = '';
 
+//mouse actions listener
 keypad.addEventListener('click', (event) => {
     const isButton = event.target.nodeName === 'BUTTON';
     if (!isButton) {
       return;
     }
 
+// number and dot selection handling
     if (event.target.className === "numberBtns"){
         if (operatorChosen === '') {
             if (event.target.value === "."){
@@ -54,6 +61,7 @@ keypad.addEventListener('click', (event) => {
         }
     }
 
+//other buttons handling
     if (event.target.className === "operatorBtns") {
         updateOperator(event.target.value);
     }
@@ -90,13 +98,43 @@ keypad.addEventListener('click', (event) => {
 
 });
 
-//keypad.addEventListener('keydown', function (event) {})
+//physical keyboard buttons listener
+window.addEventListener('keydown', function (e) {
+    const numbers  = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+    const operators = ['+', '-', '*', '/']
+    
+    //numbers and dot handling
+    if (numbers.includes(e.key)){
+        if (operatorChosen === '') {
+            if (e.key === "."){
+                addPoint(1);
+            } else { 
+                updateFirstNumber(e.key);
+            }
+        } else {
+            if (e.key === "."){
+                addPoint(2);
+            } else { 
+                updateSecondNumber(e.key);
+            }
+        }
+    }
 
+//other keys handling    
+if (operators.includes(e.key)) {
+        updateOperator(e.key);
+    }
+
+    if (e.key === "Enter") {
+        equals();
+    }
+});
+
+//add dot once function
 function addPoint(selector){
     switch (selector) {
         case 1:
             if (!firstNumber.includes(".")){ 
-            console.log(typeof firstNumber);
             updateFirstNumber(".");
             }
             break;
@@ -108,6 +146,7 @@ function addPoint(selector){
 }
 }
 
+//update variables functions
 function updateFirstNumber(newValue) {
     firstNumber = firstNumber + '' + newValue;
     screenUpdate(firstNumber);
@@ -118,14 +157,17 @@ function updateSecondNumber(newValue) {
     screenUpdate(secondNumber);
 }
 
+//update operator and perform chain operations
 function updateOperator(newValue) {
     if (firstNumber === '') {
         if (screen.textContent !== '0') {
             firstNumber = screen.textContent;
             operatorChosen = newValue;
+            operatorDisplay.textContent = operatorChosen;
         } else {
             firstNumber = '0';
             operatorChosen = newValue;
+            operatorDisplay.textContent = operatorChosen;
         }
 
     }
@@ -133,32 +175,38 @@ function updateOperator(newValue) {
         firstNumber = operate(firstNumber, secondNumber, operatorChosen);
         secondNumber = '';
         operatorChosen = newValue;
+        operatorDisplay.textContent = operatorChosen;
     } else {
         operatorChosen = newValue;
+        operatorDisplay.textContent = operatorChosen;
     }
 }
 
+//perform operation
 function equals() {
     if (secondNumber === '0') {
         screenUpdate('Error');
         cleanState();
     } else {
     sum = operate(firstNumber, secondNumber, operatorChosen);
-    screenUpdate(sum);
     firstNumber = '';
     secondNumber = '';
-    operatorChosen = '';} 
+    operatorChosen = '';
+    screenUpdate(sum);} 
 }
 
+//display update function
 function screenUpdate(content) {
     if (content.length > 8){
         screen.textContent = content.slice(-8);
     } else{
     screen.textContent = content;
-    console.log(content);
     }
+    operatorDisplay.textContent = operatorChosen;
+
 }
 
+//reset all variales function
 function cleanState() {
     firstNumber = '';
     secondNumber = '';

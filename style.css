@@ -23,6 +23,14 @@ html {
     padding: 5px;
     vertical-align: center;
     text-align: right;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.operatorDisplay {
+    font-size: 0.5em;
 }
 
 .keypad {

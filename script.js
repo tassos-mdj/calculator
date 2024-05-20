@@ -1,3 +1,5 @@
+//mouse operated only
+
 function operate(a, b, operator) {
     let sum = 0;
     num1 = Number(a);
